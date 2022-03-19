@@ -5,22 +5,16 @@ import { createNewArr } from './components/methods/createNewArr'
 import { yNot } from './components/methods/yNot'
 import lodash from 'lodash'
 
-
 function App() {
 	const [columns, setColumns] = useState([])
 	const [columns1, setColumns1] = useState([])
 	const [data, setData] = useState([])
 	const [data1, setData1] = useState([])
-	const _= require('lodash')
+	const _ = require('lodash')
 	//const [fileData, setFileData] = useState(dataFromInput)
 
 	let dataOne
 	let dataTwo
-
-	
-	
-
-	
 
 	// process CVS data
 	const processData = (dataString) => {
@@ -75,15 +69,15 @@ function App() {
 		}))
 		dataOne = list
 		console.log(`this is dataOne ${dataOne}`)
-		setData1(list)
+		setData(list)
 		console.log(`this is the list ${list}`)
-		setColumns1(columns)
+		setColumns(columns)
 		console.log(`this is the colmuns ${columns}`)
 	}
-	
+
 	const processData1 = (dataString) => {
 		let dataStringLines = dataString.split(/\r\n|\n/)
-		dataStringLines.unshift('Usernames')
+		dataStringLines.unshift('username')
 		console.log(`this is the datastringLines ${dataStringLines}`)
 		const headers = dataStringLines[0].split(
 			/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
@@ -138,7 +132,7 @@ function App() {
 		setColumns1(columns)
 		console.log(`this is the colmuns ${columns}`)
 	}
-	
+
 	//handle file upload of first box
 	const handleFirstFileUpload = (e) => {
 		const file = e.target.files[0]
@@ -160,7 +154,7 @@ function App() {
 			const data = XLSX.utils.sheet_to_csv(ws, { header: 1 })
 			processData(data)
 		}
-		reader.readAsBinaryString(file)	
+		reader.readAsBinaryString(file)
 	}
 
 	const handleSecondFileUpload = (e) => {
@@ -186,35 +180,57 @@ function App() {
 		reader.readAsBinaryString(file)
 	}
 
-
-	let unique = _.uniqBy(
-		[dataOne, dataTwo, { username: 'paradox' }],
-		'username'
-	)
+	let unique = _.uniqBy([dataOne, dataTwo, { username: 'paradox' }], 'username')
 	console.log(`this is unique: ${unique}`)
 
-	
+	//console.log(new Set([...data, ...data1]))
+
+	const uniqueData = _.uniqBy([...data, ...data1], 'username')
+
+	const [view, setView] = useState(0)
 	return (
-		<div className='container'>
-			<h3>Read CSV file in React</h3>
+		<>
+			{view === 0 && (
+				<div className='container'>
+					<h3>Read CSV file in React</h3>
 
-			<h4>Input 1</h4>
-			<input
-				type='file'
-				accept='.csv,.xlsx,.xls'
-				onChange={handleFirstFileUpload}
-			/>
+					<h4>Input 1</h4>
+					<input
+						type='file'
+						accept='.csv,.xlsx,.xls'
+						onChange={handleFirstFileUpload}
+					/>
 
-			<DataTable pagination highlightOnHover columns={columns} data={data} />
-			<h4>Input 2</h4>
-			<input
-				type='file'
-				accept='.csv,.xlsx,.xls'
-				onChange={handleSecondFileUpload}
-			/>
+					<DataTable
+						pagination
+						highlightOnHover
+						columns={columns}
+						data={data}
+					/>
+					<h4>Input 2</h4>
+					<input
+						type='file'
+						accept='.csv,.xlsx,.xls'
+						onChange={handleSecondFileUpload}
+					/>
 
-			<DataTable pagination highlightOnHover columns={columns1} data={data1} />
-		</div>
+					<DataTable
+						pagination
+						highlightOnHover
+						columns={columns1}
+						data={data1}
+					/>
+					<button onClick={() => setView(1)}>Submit</button>
+				</div>
+			)}
+			{view === 1 && (
+				<ul>
+					{uniqueData.map((x) => (
+						<li>{x.username}</li>
+					))}
+				</ul>
+			)}
+		</>
 	)
 }
 
