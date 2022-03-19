@@ -6,3 +6,12 @@ export const yNot = (a, b) => {
 	// if a organized before b 
 	return a.localeCompare(b)
 }
+
+
+
+//Sorting code
+//use lodash
+//headers has an issue running
+//filter the sets of data for the username column
+// let unique = new Set([...data1, ...data2])
+// test = .uniqueBy()

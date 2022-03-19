@@ -3,18 +3,29 @@ import * as XLSX from 'xlsx'
 import DataTable from 'react-data-table-component'
 import { createNewArr } from './components/methods/createNewArr'
 import { yNot } from './components/methods/yNot'
+import lodash from 'lodash'
+
 
 function App() {
 	const [columns, setColumns] = useState([])
 	const [columns1, setColumns1] = useState([])
 	const [data, setData] = useState([])
 	const [data1, setData1] = useState([])
+	const _= require('lodash')
+	//const [fileData, setFileData] = useState(dataFromInput)
+
+	let dataOne
+	let dataTwo
+
+	
+	
+
+	
 
 	// process CVS data
 	const processData = (dataString) => {
 		let dataStringLines = dataString.split(/\r\n|\n/)
-		dataStringLines.unshift('Usernames')
-		console.log(`this is the datastringLines ${dataStringLines}`)
+
 		const headers = dataStringLines[0].split(
 			/,(?![^"]*"(?:(?:[^"]*"){2})*[^"]*$)/
 		)
@@ -62,9 +73,11 @@ function App() {
 			username: c,
 			selector: c,
 		}))
-		setData(list)
+		dataOne = list
+		console.log(`this is dataOne ${dataOne}`)
+		setData1(list)
 		console.log(`this is the list ${list}`)
-		setColumns(columns)
+		setColumns1(columns)
 		console.log(`this is the colmuns ${columns}`)
 	}
 	
@@ -119,17 +132,19 @@ function App() {
 			username: c,
 			selector: c,
 		}))
+		dataTwo = list
 		setData1(list)
 		console.log(`this is the list ${list}`)
 		setColumns1(columns)
 		console.log(`this is the colmuns ${columns}`)
 	}
-
+	
 	//handle file upload of first box
 	const handleFirstFileUpload = (e) => {
 		const file = e.target.files[0]
 		const reader = new FileReader()
 
+		console.log(`this is dataOne ${dataOne}`)
 		reader.onload = (evt) => {
 			/*Parse Data */
 			const bstr = evt.target.result
@@ -143,10 +158,9 @@ function App() {
 			console.log(`this is the ws ${ws}`)
 			/*Convert array of arrays */
 			const data = XLSX.utils.sheet_to_csv(ws, { header: 1 })
-			console.log(`this is the data ${data}`)
 			processData(data)
 		}
-		reader.readAsBinaryString(file)
+		reader.readAsBinaryString(file)	
 	}
 
 	const handleSecondFileUpload = (e) => {
@@ -172,6 +186,14 @@ function App() {
 		reader.readAsBinaryString(file)
 	}
 
+
+	let unique = _.uniqBy(
+		[dataOne, dataTwo, { username: 'paradox' }],
+		'username'
+	)
+	console.log(`this is unique: ${unique}`)
+
+	
 	return (
 		<div className='container'>
 			<h3>Read CSV file in React</h3>
