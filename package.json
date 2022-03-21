@@ -18,6 +18,10 @@
 		"web-vitals": "^2.1.4",
 		"xlsx": "^0.18.0"
 	},
+	"engines": {
+		"npm": "8.1.2",
+		"node": "16.13.2"
+	},
 	"scripts": {
 		"start": "node app",
 		"build": "react-scripts build",
