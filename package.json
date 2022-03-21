@@ -26,7 +26,6 @@
 		"start": "node app",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
-		"heroku-postbuild": "npm install --prefix src && npm run build --prefix src",
 		"eject": "react-scripts eject"
 	},
 	"eslintConfig": {
